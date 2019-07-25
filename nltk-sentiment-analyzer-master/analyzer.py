@@ -6,6 +6,7 @@ from nltk.classify import NaiveBayesClassifier
 import sys,io
 import csv
 import matplotlib.pyplot as plt
+import pdb
 
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="gb18030")
@@ -32,8 +33,6 @@ test = pos[int((.8)*len(pos)):] + neg[int((.8)*len(neg)):]
 
 classifier = NaiveBayesClassifier.train(training)
 
-#print(classifier.classify(
-#print(format_sentence("Iran vows to restart nuclear program if deal collapses"))
 
 #another way of sentiment analyzing
 MAX_SCORE=5
@@ -45,19 +44,17 @@ with open(read_data,'r') as csv_file:
     next(csv_file)
     #same as:lines=csv_files.readlines()[1:]
     for row in reader:
-        #print(format_sentence(row[0]))
-        #print(row[1])
         predict_list[(int(row[1])-1)].append(classifier.classify(format_sentence(row[0])))
 
 
 #draw
 name_list=[str(i+1) for i in range(MAX_SCORE)]
-print(name_list)
+#print(name_list)
 pos_count=[str(predict_list[i]).count('pos') for i in range(MAX_SCORE)]
 neg_count=[str(predict_list[i]).count('neg') for i in range(MAX_SCORE)]
-print(pos_count)
-print(neg_count)
-plt.bar(MAX_SCORE,pos_count,label='positive-comments',fc='b')
-plt.bar(MAX_SCORE,neg_count,label='negative-comments',tick_label=name_list,fc='r')
+#print(pos_count)
+#print(neg_count)
+plt.bar(range(MAX_SCORE),pos_count,label='positive-comments',fc='b')
+plt.bar(range(MAX_SCORE),neg_count,bottom=pos_count,label='negative-comments',tick_label=name_list,fc='r')
 plt.legend()
 plt.show()
